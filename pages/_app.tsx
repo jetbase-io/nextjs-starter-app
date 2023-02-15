@@ -40,7 +40,7 @@ const MyApp = (props: MyAppProps) => {
             <CssBaseline />
             <MainLayout>
               <Component {...pageProps} />
-              <ToastContainer autoClose={5000} position="top-right" />;
+              <ToastContainer autoClose={5000} position="top-right" />
             </MainLayout>
           </ThemeProvider>
         </CacheProvider>

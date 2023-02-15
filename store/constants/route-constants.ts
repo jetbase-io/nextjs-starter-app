@@ -7,3 +7,5 @@ export const PROFILE_ROUTE = "/profile";
 export const PROFILE_ROUTE_UPDATE_USERNAME = "/profile/update-username";
 export const PROFILE_ROUTE_UPDATE_USER_AVATAR = "/profile/update-user-avatar";
 export const PLANS_ROUTE = "/plans";
+export const ABOUT_US_ROUTE = "/about-us";
+export const CONTACT_US_ROUTE = "/contact-us";

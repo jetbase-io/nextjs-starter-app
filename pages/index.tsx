@@ -19,9 +19,9 @@ const HomePage: NextPage<UserSliceProps> = (props) => {
     } else {
       push(SIGN_IN_ROUTE)
     }
-  }, []);
+  }, [isAuthenticated]);
 
-  return (
+  if (isAuthenticated) return (
     <div className={styles.container}>
       <Head>
         <title>Home Page</title>
@@ -29,12 +29,13 @@ const HomePage: NextPage<UserSliceProps> = (props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container>
-        <Typography variant="h1" component="h2" textAlign={"center"}>
+        <Typography variant="h3" component="h2" textAlign={"center"}>
           Welcome To Starter App
         </Typography>
       </Container>
     </div>
   );
+  return null;
 };
 
 export default connect(UserSlice.mapState, UserSlice.mapDispatch)(HomePage);

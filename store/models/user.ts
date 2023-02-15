@@ -127,7 +127,7 @@ export const user = createModel<RootModel>()({
       // eslint-disable-next-line no-useless-catch
       try {
         const result = await http.post(SIGN_OUT_URL, { refreshToken: getRefreshToken() });
-        if (result.request.status === 201) {
+        if (result.status === 201) {
           this.logOutUser({ router });
         }
       } catch (error) {
@@ -140,7 +140,7 @@ export const user = createModel<RootModel>()({
       // eslint-disable-next-line no-useless-catch
       try {
         const result = await http.post(FULL_SIGN_OUT_URL);
-        if (result.request.status === 201) {
+        if (result.status === 201) {
           this.logOutUser({ router });
         }
       } catch (error) {
