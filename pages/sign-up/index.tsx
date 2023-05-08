@@ -2,7 +2,6 @@ import { GetServerSideProps, NextPage } from "next";
 import { connect } from "react-redux";
 import Link from "@mui/material/Link";
 import { useRouter } from "next/router";
-import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import React, { useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
@@ -13,17 +12,16 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { HOME_ROUTE, SIGN_IN_ROUTE } from "../../store/constants/route-constants";
-import { useForm, Controller, FieldValues } from "react-hook-form";
+import { useForm, FieldValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { UserSlice, UserSliceProps } from "../../store/slice/user";
+import Placeholder from "./placeholder";
 
 const SignUpPage: NextPage<UserSliceProps> = (props) => {
-  const { locale } = useRouter();
-  const { t: translate } = useTranslation("common");
   const router = useRouter();
 
-  const { signUp, isAuthenticated } = props;
+  const { signUp, isAuthenticated, isSignedUp } = props;
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -80,69 +78,73 @@ const SignUpPage: NextPage<UserSliceProps> = (props) => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1, maxWidth: 450, width: 450 }}>
-          <TextField
-            margin="normal"
-            autoComplete="username"
-            required
-            fullWidth
-            id="username"
-            label="Username"
-            autoFocus
-            {...register("username")}
-            error={errors.username ? true : false}
-            helperText={errors.username ? (errors.username.message as string) : ""}
-          />
+        {isSignedUp ? (
+          <Placeholder />
+        ) : (
+          <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1, maxWidth: 450, width: 450 }}>
+            <TextField
+              margin="normal"
+              autoComplete="username"
+              required
+              fullWidth
+              id="username"
+              label="Username"
+              autoFocus
+              {...register("username")}
+              error={errors.username ? true : false}
+              helperText={errors.username ? (errors.username.message as string) : ""}
+            />
 
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            autoComplete="email"
-            {...register("email")}
-            error={errors.email ? true : false}
-            helperText={errors.email ? (errors.email.message as string) : ""}
-          />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              autoComplete="email"
+              {...register("email")}
+              error={errors.email ? true : false}
+              helperText={errors.email ? (errors.email.message as string) : ""}
+            />
 
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="new-password"
-            {...register("password")}
-            error={errors.password ? true : false}
-            helperText={errors.password ? (errors.password.message as string) : ""}
-          />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="new-password"
+              {...register("password")}
+              error={errors.password ? true : false}
+              helperText={errors.password ? (errors.password.message as string) : ""}
+            />
 
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            label="Confirm Password"
-            type="password"
-            id="confirPassword"
-            autoComplete="new-password"
-            {...register("confirmPassword")}
-            error={errors.confirmPassword ? true : false}
-            helperText={errors.confirmPassword ? (errors.confirmPassword.message as string) : ""}
-          />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="Confirm Password"
+              type="password"
+              id="confirPassword"
+              autoComplete="new-password"
+              {...register("confirmPassword")}
+              error={errors.confirmPassword ? true : false}
+              helperText={errors.confirmPassword ? (errors.confirmPassword.message as string) : ""}
+            />
 
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Sign Up
-          </Button>
-          <Grid container>
-            <Grid item>
-              <Link href={SIGN_IN_ROUTE} variant="body2">
-                Already have an account? Sign in
-              </Link>
+            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+              Sign Up
+            </Button>
+            <Grid container>
+              <Grid item>
+                <Link href={SIGN_IN_ROUTE} variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        )}
       </Box>
     </div>
   );

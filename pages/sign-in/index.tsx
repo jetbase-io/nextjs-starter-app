@@ -18,8 +18,14 @@ import { NextPage } from "next";
 import { UserSlice, UserSliceProps } from "../../store/slice/user";
 
 const SignInPage: NextPage<UserSliceProps> = (props) => {
-  const { isAuthenticated, signIn } = props;
+  const { isAuthenticated, signIn, confirm } = props;
   const router = useRouter();
+
+  const token = router.query.confirmation_token;
+  useEffect(() => {
+    if (!token || typeof token !== "string") return;
+    confirm({ token });
+  }, [token]);
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
