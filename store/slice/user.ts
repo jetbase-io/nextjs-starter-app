@@ -6,11 +6,10 @@ interface signInProps {
   password: string;
 }
 
-interface signUpProps {
+export interface signUpProps {
   username: string;
   email: string;
   password: string;
-  router: NextRouter;
 }
 
 interface confirmProps {
@@ -59,8 +58,7 @@ export const mapState = (state: RootState) => ({
 
 export const mapDispatch = (dispatch: Dispatch) => ({
   signIn: ({ username, password }: signInProps) => dispatch.user.signIn({ username, password }),
-  signUp: ({ username, email, password, router }: signUpProps) =>
-    dispatch.user.signUp({ username, email, password, router }),
+  signUp: ({ username, email, password }: signUpProps) => dispatch.user.signUp({ username, email, password }),
   confirm: ({ token }: confirmProps) => dispatch.user.confirm({ token }),
   signOut: ({ router }: logOutUserProps) => dispatch.user.signOut({ router }),
   fullSignOut: ({ router }: logOutUserProps) => dispatch.user.fullSignOut({ router }),

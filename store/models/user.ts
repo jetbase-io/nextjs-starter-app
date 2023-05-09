@@ -99,7 +99,7 @@ export const user = createModel<RootModel>()({
     },
   },
   effects: (dispatch) => ({
-    async signUp({ username, email, password, router }) {
+    async signUp({ username, email, password }) {
       // TODO processing error...
       // eslint-disable-next-line no-useless-catch
       try {
