@@ -1,5 +1,6 @@
 // users
 export const SIGN_UP_URL = "auth/signUp";
+export const CONFIRMATION_URL = "auth/confirmation";
 export const SIGN_IN_URL = "auth/signIn";
 export const SIGN_OUT_URL = "auth/signOut";
 export const FULL_SIGN_OUT_URL = "auth/fullSignOut";

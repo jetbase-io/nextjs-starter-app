@@ -11,6 +11,7 @@ import {
 import {
   ACTIVATE_SUBSCRIPTION_URL,
   CHECK_SUBSCRIPTION_URL,
+  CONFIRMATION_URL,
   DETACH_PAYMENT_METHODS,
   FULL_SIGN_OUT_URL,
   GET_PAYMENT_METHODS_URL,
@@ -30,6 +31,8 @@ type UserState = {
   isAuthenticated: boolean;
   accessToken: "";
   refreshToken: "";
+  isSignedUp: boolean;
+  isConfirmed: boolean;
   paymentMethods: Array<{ id: string; card: { brand: string; last4: string } }>;
   subscription: { nickname: string; status: string };
 };
@@ -39,6 +42,8 @@ export const user = createModel<RootModel>()({
     isAuthenticated: getIsAuthenticated(),
     accessToken: getAccessToken(),
     refreshToken: getRefreshToken(),
+    isSignedUp: false,
+    isConfirmed: false,
     paymentMethods: [],
     subscription: { nickname: "", status: STRIPE_INACTIVE_STATUS },
   } as UserState,
@@ -48,6 +53,20 @@ export const user = createModel<RootModel>()({
         ...state,
         isAuthenticated,
       } as UserState;
+    },
+
+    setIsSignedUp(state, isSuccessful) {
+      return {
+        ...state,
+        isSignedUp: isSuccessful,
+      };
+    },
+
+    setIsConfirmed(state, isSuccessful) {
+      return {
+        ...state,
+        isConfirmed: isSuccessful,
+      };
     },
 
     setTokens(state, { accessToken, refreshToken }) {
@@ -76,11 +95,11 @@ export const user = createModel<RootModel>()({
       return {
         ...state,
         ...user,
-      }
-    }
+      };
+    },
   },
   effects: (dispatch) => ({
-    async signUp({ username, email, password, router }) {
+    async signUp({ username, email, password }) {
       // TODO processing error...
       // eslint-disable-next-line no-useless-catch
       try {
@@ -90,7 +109,22 @@ export const user = createModel<RootModel>()({
           password,
         });
         if (result.status === 201) {
-          router.push(SIGN_IN_ROUTE);
+          dispatch.user.setIsSignedUp(true);
+          toast.info(result?.data?.message || "Successfully signed up!");
+        }
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async confirm({ token }) {
+      // TODO processing error...
+      // eslint-disable-next-line no-useless-catch
+      try {
+        const result = await http.patch(CONFIRMATION_URL, { token });
+        if (result.request.status === 200) {
+          dispatch.user.setIsConfirmed(true);
+          toast.info(result?.data?.message || "Successfully confirmed! Now you can sign in.");
         }
       } catch (err) {
         throw err;
@@ -152,7 +186,7 @@ export const user = createModel<RootModel>()({
       try {
         const result = await http.get(`${UPDATE_USERNAME}${id}`);
         if (result.status === 200) {
-          dispatch.user.setUser(result.data)
+          dispatch.user.setUser(result.data);
         }
       } catch (error) {
         throw error;
@@ -189,7 +223,7 @@ export const user = createModel<RootModel>()({
         });
         if (result.status === 200) {
           const newUsername = result.data.username;
-          dispatch.user.setUser({ username: newUsername});
+          dispatch.user.setUser({ username: newUsername });
           toast.success(`Username is updated! Your new username is: ${newUsername}`);
         }
         if (result.status === 400) {
